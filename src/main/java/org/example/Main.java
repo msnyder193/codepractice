@@ -111,4 +111,21 @@ public class Main {
         }
         return sum;
     }
+
+    public static boolean getXO (String str) {
+        //case insensitive
+        str = str.toLowerCase();
+        String[] letters = str.split("");
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        //check amount of os and xs
+        for(int i = 0; i < letters.length; i++) {
+            if(!map.containsKey(letters[i])) {
+                map.put(letters[i], 1);
+            } else {
+                map.put(letters[i], map.get(letters[i]) + 1);
+            }
+        }
+        return (map.get("o") == map.get("x"));
+
+    }
 }
