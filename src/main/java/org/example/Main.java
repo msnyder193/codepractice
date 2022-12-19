@@ -1,5 +1,7 @@
 package org.example;
 
+import org.w3c.dom.Node;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,7 +16,18 @@ public class Main {
 //        sumOfNumbers(num);
 //        pinIsNumAndFourOrSixDigits("-a12");
 //        pinIsNumAndFourOrSixDigits("6666");
-        getLengthOfMissingArray(new Object[][] { new Object[] { 5, 2, 9 }, new Object[] { 4, 5, 1, 1, 5, 6}, new Object[] { 1, 1 }, new Object[] { 5, 6, 7, 8, 9 }});
+//        getLengthOfMissingArray(new Object[][] { new Object[] { 5, 2, 9 }, new Object[] { 4, 5, 1, 1, 5, 6}, new Object[] { 1, 1 }, new Object[] { 5, 6, 7, 8, 9 }});
+        String s1 = "()"; // valid
+        String s2 = "()[]{}"; // valid
+        String s3 = "(]"; // not valid
+        String s4 = "([)]"; // not valid
+        String s5 = "{[]}"; // valid
+
+        System.out.println(isValid(s1)); // true
+        System.out.println(isValid(s2)); // true
+        System.out.println(isValid(s3)); // false
+        System.out.println(isValid(s4)); // false
+        System.out.println(isValid(s5)); // true
 
 
     }
@@ -59,7 +72,7 @@ public class Main {
             System.out.println("not a perfect square");
         } else {
             double result = (Math.sqrt(sq)) + 1;
-            long nextSquare = (long) (result * result);
+            long nextSquare = (long) (result);
             System.out.println(nextSquare);
         }
     }
@@ -118,7 +131,7 @@ public class Main {
         String[] letters = str.split("");
         Map<String, Integer> map = new HashMap<String, Integer>();
         //check amount of os and xs
-        for(int i = 0; i < letters.length; i++) {
+        for (int i = 0; i < letters.length; i++) {
             if(!map.containsKey(letters[i])) {
                 map.put(letters[i], 1);
             } else {
@@ -128,4 +141,55 @@ public class Main {
         return (map.get("o") == map.get("x"));
 
     }
+
+    public NodeList mergeTwoLists(NodeList list1, NodeList list2) {
+    //checks if list is empty return the other
+        if (list1 == null) {
+            return list2;
+        } else if (list2 == null) {
+            return list1;
+        }
+        //create null list to return if both are null
+        NodeList result = null;
+        //get the lower of the two values
+        if (list1.val <= list2.val) {
+            result = list1;
+            result.next = mergeTwoLists(list1.next, list2);
+        } else {
+            result = list2;
+            result.next = mergeTwoLists(list1, list2.next);
+        }
+
+        return result;
+    }
+    public static boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+
+        // iterate through the string
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            // if the current character is an open bracket, push it to the stack
+            if (c == '(' || c == '{' || c == '[') {
+                stack.push(c);
+            }
+            // if the current character is a close bracket
+            else {
+                // check if the stack is empty, which means there is no corresponding open bracket for the close bracket
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                // check if the close bracket matches the open bracket at the top of the stack
+                else if ((c == ')' && stack.peek() == '(') || (c == '}' && stack.peek() == '{') || (c == ']' && stack.peek() == '[')) {
+                    stack.pop();
+                }
+                // if the close bracket does not match the open bracket at the top of the stack, then the string is not valid
+                else {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
 }
